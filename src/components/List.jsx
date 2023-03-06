@@ -6,7 +6,14 @@ import {
 import { Card, Grid, IconButton, Typography } from "@mui/material";
 import { Container } from "@mui/system";
 
-export const List = ({ todos, handleDelete, handleComplete, handleUpdate }) => {
+export const List = ({
+  todos,
+  handleDelete,
+  handleComplete,
+  handleUpdate,
+  filteredData,
+  search,
+}) => {
   const deleteItem = (itemId) => {
     handleDelete(itemId);
   };
@@ -30,44 +37,107 @@ export const List = ({ todos, handleDelete, handleComplete, handleUpdate }) => {
           <Container fluid>
             <Grid container>
               <Grid item xs={12} sm={12} md={12} lg={12}>
-                {todos.map((item) => {
-                  return (
-                    <Card
-                      key={item?.id}
-                      sx={{
-                        marginTop: 2,
-                        padding: 2,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Typography
-                        variant="body1"
-                        color="#1f4e5f"
-                        style={{
-                          textDecoration: item?.isCompleted
-                            ? "line-through"
-                            : "",
-                          color: item?.isCompleted ? "green" : "",
-                        }}
-                      >
-                        {item?.value}
-                      </Typography>
-                      <div className="action">
-                        <IconButton onClick={() => completeItem(item.id)}>
-                          <CheckCircleOutline />
-                        </IconButton>
-                        <IconButton onClick={() => updateItem(item.id)}>
-                          <EditOutlined />
-                        </IconButton>
-                        <IconButton onClick={() => deleteItem(item.id)}>
-                          <DeleteOutlined />
-                        </IconButton>
-                      </div>
-                    </Card>
-                  );
-                })}
+                {search
+                  ? filteredData.map((item) => {
+                      return (
+                        <Card
+                          key={item?.id}
+                          sx={{
+                            marginTop: 2,
+                            padding: 2,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <Typography
+                            variant="h5"
+                            color="#1f4e5f"
+                            style={{
+                              textDecoration: item?.isCompleted
+                                ? "line-through"
+                                : "",
+                              color: item?.isCompleted ? "green" : "",
+                            }}
+                          >
+                            {item?.value}
+                          </Typography>
+                          <div className="action">
+                            <IconButton
+                              onClick={() => completeItem(item.id)}
+                              sx={{
+                                opacity: item.isCompleted ? 0.25 : 1,
+                                pointerEvents: item.isCompleted ? "none" : "",
+                              }}
+                            >
+                              <CheckCircleOutline />
+                            </IconButton>
+                            <IconButton
+                              onClick={() => updateItem(item.id)}
+                              sx={{
+                                opacity: item.isCompleted ? 0.25 : 1,
+                                pointerEvents: item.isCompleted ? "none" : "",
+                              }}
+                            >
+                              <EditOutlined />
+                            </IconButton>
+                            <IconButton onClick={() => deleteItem(item.id)}>
+                              <DeleteOutlined />
+                            </IconButton>
+                          </div>
+                        </Card>
+                      );
+                    })
+                  : todos.map((item) => {
+                      return (
+                        <Card
+                          key={item?.id}
+                          sx={{
+                            marginTop: 2,
+                            padding: 2,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <Typography
+                            variant="h5"
+                            color="#1f4e5f"
+                            style={{
+                              textDecoration: item?.isCompleted
+                                ? "line-through"
+                                : "",
+                              color: item?.isCompleted ? "green" : "",
+                            }}
+                          >
+                            {item?.value}
+                          </Typography>
+                          <div className="action">
+                            <IconButton
+                              onClick={() => completeItem(item.id)}
+                              sx={{
+                                opacity: item.isCompleted ? 0.25 : 1,
+                                pointerEvents: item.isCompleted ? "none" : "",
+                              }}
+                            >
+                              <CheckCircleOutline />
+                            </IconButton>
+                            <IconButton
+                              onClick={() => updateItem(item.id)}
+                              sx={{
+                                opacity: item.isCompleted ? 0.25 : 1,
+                                pointerEvents: item.isCompleted ? "none" : "",
+                              }}
+                            >
+                              <EditOutlined />
+                            </IconButton>
+                            <IconButton onClick={() => deleteItem(item.id)}>
+                              <DeleteOutlined />
+                            </IconButton>
+                          </div>
+                        </Card>
+                      );
+                    })}
               </Grid>
             </Grid>
           </Container>

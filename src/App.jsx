@@ -11,7 +11,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SaveRounded } from "@mui/icons-material";
 
 function App() {
@@ -19,8 +19,24 @@ function App() {
   const [todos, setTodos] = useState([]);
   const [isUpdate, setIsupdate] = useState(false);
   const [selectedItem, setSelectedItem] = useState("");
+  const [search, setSearch] = useState("");
+  const [filteredData, setFilteredData] = useState(todos);
+
+  useEffect(() => {
+    if (search) {
+      setFilteredData(
+        todos.filter((item) => {
+          return item.value.toLowerCase().includes(search.toLowerCase());
+        })
+      );
+    }
+    console.log(filteredData);
+  }, [search]);
 
   const handleChange = (e) => {
+    if (search) {
+      setSearch("");
+    }
     setInput(e.target.value);
   };
 
@@ -75,6 +91,13 @@ function App() {
   };
 
   const handleDelete = (itemId) => {
+    if (search) {
+      setFilteredData(
+        todos.filter((item) => {
+          return item.id!== itemId;
+        })
+      );
+    }
     let modifiedTodos = todos.filter((todo) => todo.id !== itemId);
     setTodos(modifiedTodos);
   };
@@ -122,14 +145,31 @@ function App() {
               sx={{ marginTop: 5, marginLeft: "auto", marginRight: "auto" }}
             >
               <CardContent>
-                <Typography
-                  variant="h5"
-                  color="#1f4e5f"
-                  fontWeight={"bold"}
-                  align={"center"}
+                <div
+                  className="top"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
                 >
-                  Advance Todo App
-                </Typography>
+                  <Typography
+                    variant="h5"
+                    color="#1f4e5f"
+                    fontWeight={"bold"}
+                    // align={"center"}
+                  >
+                    Advance Todo App
+                  </Typography>
+
+                  <TextField
+                    variant="outlined"
+                    label="Search ..."
+                    size="small"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                  />
+                </div>
 
                 <div
                   className="addTodo"
@@ -188,6 +228,8 @@ function App() {
         handleDelete={handleDelete}
         handleComplete={handleComplete}
         handleUpdate={handleUpdate}
+        filteredData={filteredData}
+        search={search}
       />
     </div>
   );
