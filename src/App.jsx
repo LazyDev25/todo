@@ -12,17 +12,20 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
+import { SaveRounded } from "@mui/icons-material";
 
 function App() {
   const [input, setInput] = useState("");
   const [todos, setTodos] = useState([]);
+  const [isUpdate, setIsupdate] = useState(false);
+  const [selectedItem, setSelectedItem] = useState("");
 
   const handleChange = (e) => {
     setInput(e.target.value);
   };
 
   const handleKeyDown = (e) => {
-    if (e.key == "Enter" && input) {
+    if (e.key == "Enter" && input && !isUpdate) {
       let obj = {
         id: todos.length + 1,
         value: input,
@@ -30,15 +33,45 @@ function App() {
       setTodos([...todos, obj]);
       setInput("");
       console.log("tosos", todos);
+    } else if (e.key == "Enter" && input && isUpdate) {
+      console.log("in else if");
+
+      setTodos(
+        todos.map((todo) => {
+          if (todo.id === selectedItem.id) {
+            return { ...todo, value: input };
+          }
+          return todo;
+        })
+      );
+      setIsupdate(false);
+      setInput("");
+      console.log("toddddd", todos);
+    } else {
+      return;
     }
   };
   const handleSubmit = () => {
-    let obj = {
-      id: todos.length + 1,
-      value: input,
-    };
-    setTodos([...todos, obj]);
-    setInput("");
+    if (input && isUpdate) {
+      setTodos(
+        todos.map((todo) => {
+          if (todo.id === selectedItem.id) {
+            return { ...todo, value: input };
+          }
+          return todo;
+        })
+      );
+      setIsupdate(false);
+      setInput("");
+      console.log("toddddd", todos);
+    } else {
+      let obj = {
+        id: todos.length + 1,
+        value: input,
+      };
+      setTodos([...todos, obj]);
+      setInput("");
+    }
   };
 
   const handleDelete = (itemId) => {
@@ -58,6 +91,20 @@ function App() {
       return item;
     });
     setTodos(list);
+  };
+  const handleUpdate = (itemId) => {
+    // setIsupdate(true);
+
+    setSelectedItem(
+      todos.find((todo) => {
+        if (todo.id === itemId) {
+          setInput(todo.value);
+          setIsupdate(true);
+
+          return todo;
+        }
+      })
+    );
   };
 
   return (
@@ -108,13 +155,23 @@ function App() {
 
                       endAdornment: (
                         <InputAdornment position="end">
-                          <IconButton onClick={handleSubmit}>
-                            <AddCircleIcon
-                              fontSize="large"
-                              color="primary"
-                              sx={{ cursor: "pointer" }}
-                            />
-                          </IconButton>
+                          {isUpdate ? (
+                            <IconButton onClick={handleSubmit}>
+                              <SaveRounded
+                                fontSize="large"
+                                color="primary"
+                                sx={{ cursor: "pointer" }}
+                              />
+                            </IconButton>
+                          ) : (
+                            <IconButton onClick={handleSubmit}>
+                              <AddCircleIcon
+                                fontSize="large"
+                                color="primary"
+                                sx={{ cursor: "pointer" }}
+                              />
+                            </IconButton>
+                          )}
                         </InputAdornment>
                       ),
                     }}
@@ -130,6 +187,7 @@ function App() {
         todos={todos}
         handleDelete={handleDelete}
         handleComplete={handleComplete}
+        handleUpdate={handleUpdate}
       />
     </div>
   );

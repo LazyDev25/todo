@@ -6,16 +6,15 @@ import {
 import { Card, Grid, IconButton, Typography } from "@mui/material";
 import { Container } from "@mui/system";
 
-export const List = ({ todos, handleDelete, handleComplete }) => {
+export const List = ({ todos, handleDelete, handleComplete, handleUpdate }) => {
   const deleteItem = (itemId) => {
     handleDelete(itemId);
   };
   const completeItem = (item) => {
     handleComplete(item);
   };
-  const strike = {
-    color: "green",
-    "text-decoration": "line - through",
+  const updateItem = (itemId) => {
+    handleUpdate(itemId);
   };
   return (
     <>
@@ -34,7 +33,7 @@ export const List = ({ todos, handleDelete, handleComplete }) => {
                 {todos.map((item) => {
                   return (
                     <Card
-                      key={item.id}
+                      key={item?.id}
                       sx={{
                         marginTop: 2,
                         padding: 2,
@@ -47,17 +46,20 @@ export const List = ({ todos, handleDelete, handleComplete }) => {
                         variant="body1"
                         color="#1f4e5f"
                         style={{
-                          textDecoration: item.isCompleted
+                          textDecoration: item?.isCompleted
                             ? "line-through"
                             : "",
-                          color: item.isCompleted ? "green" : "",
+                          color: item?.isCompleted ? "green" : "",
                         }}
                       >
-                        {item.value}
+                        {item?.value}
                       </Typography>
                       <div className="action">
                         <IconButton onClick={() => completeItem(item.id)}>
                           <CheckCircleOutline />
+                        </IconButton>
+                        <IconButton onClick={() => updateItem(item.id)}>
+                          <EditOutlined />
                         </IconButton>
                         <IconButton onClick={() => deleteItem(item.id)}>
                           <DeleteOutlined />
