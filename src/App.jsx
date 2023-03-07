@@ -94,7 +94,7 @@ function App() {
     if (search) {
       setFilteredData(
         todos.filter((item) => {
-          return item.id!== itemId;
+          return item.id !== itemId;
         })
       );
     }
@@ -159,7 +159,7 @@ function App() {
                     fontWeight={"bold"}
                     // align={"center"}
                   >
-                    Advance Todo App
+                    Todo App
                   </Typography>
 
                   <TextField
